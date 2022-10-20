@@ -1,5 +1,5 @@
 "use strict";
-require("./server");
+const serverListening = require("./server");
 const { BrowserWindow, app } = require("electron");
 
 const unlockFPS = process.argv.includes("--unlock-fps");
@@ -19,5 +19,5 @@ app.once("ready", () => {
 
   win.once("ready-to-show", () => win.show());
 
-  win.loadFile("public/index.html");
+  serverListening.then(() => win.loadURL("http://localhost:8080"));
 });

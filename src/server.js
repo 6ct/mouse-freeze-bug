@@ -38,6 +38,12 @@ server.on("upgrade", (req, socket, head) =>
   wss.handleUpgrade(req, socket, head, (ws) => wss.emit("connection", ws, req))
 );
 
+const serverListening = new Promise((resolve) => {
+  server.on("listening", resolve);
+});
+
 server.listen({
   port: 8080,
 });
+
+module.exports = serverListening;
