@@ -12,7 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "electron": "^9.4.4",
+    "electron": "^21.2.0",
     "express": "^4.18.2",
     "ws": "^8.9.0"
   }
