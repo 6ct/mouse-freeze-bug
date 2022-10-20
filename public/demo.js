@@ -5,95 +5,32 @@ import * as THREE from "three";
 
 import Stats from "three/addons/libs/stats.module.js";
 
-let container, stats;
+const container = document.getElementById("container");
 
-let cameraRTT, sceneRTT, sceneScreen, renderer;
+const rtTexture = new THREE.WebGLRenderTarget(1, 1, {
+  type: THREE.FloatType,
+});
 
-let mouseX = 0,
-  mouseY = 0;
+const renderer = new THREE.WebGLRenderer();
+renderer.setPixelRatio(1);
+renderer.setSize(1, 1);
 
-const targetWidth = 480;
-const targetHeight = 480;
+container.append(renderer.domElement);
 
-const windowHalfX = /* window.innerWidth */ targetWidth / 2;
-const windowHalfY = /* window.innerHeight */ targetHeight / 2;
+const stats = new Stats();
+container.append(stats.dom);
 
-let rtTexture;
-
-init();
 animate();
-
-function init() {
-  container = document.getElementById("container");
-
-  cameraRTT = new THREE.OrthographicCamera(
-    /* window.innerWidth */ targetWidth / -2,
-    /* window.innerWidth */ targetWidth / 2,
-    /* window.innerHeight */ targetHeight / 2,
-    /* window.innerHeight */ targetHeight / -2,
-    -10000,
-    10000
-  );
-  cameraRTT.position.z = 100;
-
-  //
-
-  sceneRTT = new THREE.Scene();
-  sceneScreen = new THREE.Scene();
-
-  rtTexture = new THREE.WebGLRenderTarget(
-    /* window.innerWidth */ targetWidth,
-    /* window.innerHeight */ targetHeight,
-    {
-      minFilter: THREE.LinearFilter,
-      magFilter: THREE.NearestFilter,
-      format: THREE.RGBAFormat,
-      type: THREE.FloatType,
-    }
-  );
-
-  renderer = new THREE.WebGLRenderer();
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(
-    /* window.innerWidth */ targetWidth,
-    /* window.innerHeight */ targetHeight
-  );
-  renderer.autoClear = false;
-
-  container.appendChild(renderer.domElement);
-
-  stats = new Stats();
-  container.appendChild(stats.dom);
-}
 
 function animate() {
   requestAnimationFrame(animate);
-
   render();
   stats.update();
 }
 
 function render() {
   renderer.clear();
-
-  // Render first scene into texture
-
   renderer.setRenderTarget(rtTexture);
-  renderer.clear();
-  renderer.render(sceneRTT, cameraRTT);
-
-  // Render full sc reen quad with generated texture
-
   renderer.setRenderTarget(null);
-  renderer.render(sceneScreen, cameraRTT);
-
-  const read = new Float32Array(4);
-  renderer.readRenderTargetPixels(
-    rtTexture,
-    windowHalfX + mouseX,
-    windowHalfY - mouseY,
-    1,
-    1,
-    read
-  );
+  renderer.readRenderTargetPixels(rtTexture, 0, 0, 0, 0, new Float32Array(0));
 }
