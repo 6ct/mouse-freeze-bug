@@ -2,10 +2,9 @@
  * Adopted from https://threejs.org/examples/webgl_read_float_buffer.html
  */
 import * as THREE from "three";
-
 import Stats from "three/addons/libs/stats.module.js";
 
-const container = document.getElementById("container");
+export const fpsPanel = new Stats();
 
 const rtTexture = new THREE.WebGLRenderTarget(1, 1, {
   type: THREE.FloatType,
@@ -15,17 +14,14 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setPixelRatio(1);
 renderer.setSize(1, 1);
 
-container.append(renderer.domElement);
-
-const stats = new Stats();
-container.append(stats.dom);
+document.documentElement.append(renderer.domElement);
 
 animate();
 
 function animate() {
   requestAnimationFrame(animate);
   render();
-  stats.update();
+  fpsPanel.update();
 }
 
 function render() {

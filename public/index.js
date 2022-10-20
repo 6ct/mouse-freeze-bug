@@ -1,4 +1,5 @@
 import Stats from "three/addons/libs/stats.module.js";
+import { fpsPanel } from "./demo.js";
 
 const wsLatencyPanel = new Stats.Panel("WS latency", "#0f0", "#020");
 const workerLatencyPanel = new Stats.Panel("Worker latency", "#0f0", "#020");
@@ -11,10 +12,9 @@ let workerPeakLatency = 0;
 
 // let wsLatency = NaN;
 
-const container = document.getElementById("test-stats");
-
-container.append(wsLatencyPanel.dom);
-container.append(workerLatencyPanel.dom);
+document.body.append(fpsPanel.dom);
+document.body.append(wsLatencyPanel.dom);
+document.body.append(workerLatencyPanel.dom);
 
 ws.addEventListener("message", ({ data }) => {
   const time = parseInt(data);
